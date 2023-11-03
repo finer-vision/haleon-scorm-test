@@ -9,7 +9,7 @@ const PACKAGES_DIR = path.join(ROOT_DIR, "packages");
 const BUILD_DIR = path.join(ROOT_DIR, "build");
 
 const config = {
-  name: "PWC SCORM Test",
+  name: "Haleon SCORM Test",
 };
 
 function replaceTemplate(template: string, key: string, value: string): string {
@@ -80,7 +80,7 @@ async function getAllFiles(dir: string, allFiles: string[] = []): Promise<string
 
     execSync(`rm -rf ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
 
-    await fs.rename(path.join(PACKAGES_DIR, "build.zip"), path.join(PACKAGES_DIR, `pwc-scorm-test-${pkg.version}.zip`));
+    await fs.rename(path.join(PACKAGES_DIR, "build.zip"), path.join(PACKAGES_DIR, `haleon-scorm-test-${pkg.version}.zip`));
 
     process.exit(0);
   } catch (err) {
