@@ -18,6 +18,8 @@ function mapLinear(x: number, a1: number, a2: number, b1: number, b2: number) {
   return Math.max(b1, Math.min(b2, mapped));
 }
 
+(window as any).SCORM_DEBUG = scorm;
+
 export const useScorm = create<Scorm>(() => {
   function set(key: string, value: any) {
     scorm.set(key, key === "cmi.suspend_data" ? JSON.stringify(value) : value);
@@ -38,22 +40,22 @@ export const useScorm = create<Scorm>(() => {
     init() {
       scorm.configure({ debug: true, handleExitMode: true });
       scorm.initialize();
-      set("cmi.core.score.min", 0);
-      set("cmi.core.score.max", 1);
-      const currentProgress = get("cmi.core.score.raw", 0);
+      set("cmi.score.min", 0);
+      set("cmi.score.max", 1);
+      const currentProgress = get("cmi.score.raw", 0);
       if (currentProgress < 1) {
-        set("cmi.core.lesson_status", "incomplete");
+        set("cmi.success_status", "incomplete");
       }
       return pages[Math.floor(mapLinear(currentProgress, 0, 1, 0, pages.length - 1))];
     },
     get,
     set,
     updateProgress(page) {
-      const currentProgress = get("cmi.core.score.raw", 0);
+      const currentProgress = get("cmi.score.raw", 0);
       const progress = (pages.indexOf(page) + 1) / Math.max(1, pages.length);
-      set("cmi.core.score.raw", Math.max(currentProgress, progress));
+      set("cmi.score.raw", Math.max(currentProgress, progress));
       if (progress === 1) {
-        set("cmi.core.lesson_status", "completed");
+        set("cmi.success_status", "completed");
       }
     },
     exit() {
