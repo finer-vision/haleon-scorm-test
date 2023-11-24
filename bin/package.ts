@@ -44,19 +44,9 @@ async function getAllFiles(dir: string, allFiles: string[] = []): Promise<string
   try {
     const pkg = JSON.parse(await fs.readFile(path.join(ROOT_DIR, "package.json"), "utf-8"));
 
-    execSync(`rm -rf ${path.join(PACKAGES_DIR, "build")}`, {
-      stdio: "inherit",
-    });
-    execSync(`cp -R ${BUILD_DIR} ${path.join(PACKAGES_DIR, "build")}`, {
-      stdio: "inherit",
-    });
-
-    execSync(`rm -rf ${path.join(PACKAGES_DIR, "build", "schemas")}`, {
-      stdio: "inherit",
-    });
-    execSync(`cp -R ${path.join(SCORM_DIR, "schemas")} ${path.join(PACKAGES_DIR, "build", "schemas")}`, {
-      stdio: "inherit",
-    });
+    execSync(`rm -rf ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
+    execSync(`cp -R ${BUILD_DIR} ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
+    execSync(`cp -R ${SCORM_DIR} ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
 
     const manifestTemplate = await fs.readFile(path.join(SCORM_DIR, "imsmanifest.xml"), "utf-8");
     const files = await getAllFiles(BUILD_DIR);
@@ -80,7 +70,10 @@ async function getAllFiles(dir: string, allFiles: string[] = []): Promise<string
 
     execSync(`rm -rf ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
 
-    await fs.rename(path.join(PACKAGES_DIR, "build.zip"), path.join(PACKAGES_DIR, `haleon-scorm-test-${pkg.version}.zip`));
+    await fs.rename(
+      path.join(PACKAGES_DIR, "build.zip"),
+      path.join(PACKAGES_DIR, `haleon-scorm-test-${pkg.version}.zip`),
+    );
 
     process.exit(0);
   } catch (err) {

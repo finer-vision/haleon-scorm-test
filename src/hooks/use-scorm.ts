@@ -38,7 +38,7 @@ export const useScorm = create<Scorm>(() => {
 
   return {
     init() {
-      scorm.configure({ debug: true, handleExitMode: true });
+      scorm.configure({ debug: true, handleExitMode: true, handleCompletionStatus: true });
       scorm.initialize();
       set("cmi.score.min", 0);
       set("cmi.score.max", 1);
@@ -46,6 +46,7 @@ export const useScorm = create<Scorm>(() => {
       if (currentProgress < 1) {
         set("cmi.success_status", "incomplete");
       }
+      scorm.commit();
       return pages[Math.floor(mapLinear(currentProgress, 0, 1, 0, pages.length - 1))];
     },
     get,
@@ -57,6 +58,7 @@ export const useScorm = create<Scorm>(() => {
       if (progress === 1) {
         set("cmi.success_status", "completed");
       }
+      scorm.commit();
     },
     exit() {
       scorm.terminate();
