@@ -6,7 +6,7 @@ const pages = ["/", "/home", "/end"] as const;
 type Page = (typeof pages)[number];
 
 type Scorm = {
-  init: () => (typeof pages)[number];
+  init: () => Promise<(typeof pages)[number]>;
   get: (key: string, defaultValue?: any) => any;
   set: (key: string, value: any) => void;
   updateProgress: (page: Page) => void;
@@ -20,12 +20,41 @@ function mapLinear(x: number, a1: number, a2: number, b1: number, b2: number) {
 
 (window as any).SCORM_DEBUG = scorm;
 
+let waitTimeStart: number | undefined = undefined;
+function waitForScormToInitialize(timeout = 2000): Promise<void> {
+  if (waitTimeStart === undefined) {
+    waitTimeStart = Date.now();
+  }
+  const wait = (ms: number) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  };
+  return new Promise(async (resolve) => {
+    if (scorm.isActive) {
+      return resolve();
+    }
+    if (waitTimeStart !== undefined && Date.now() - waitTimeStart > timeout) {
+      return resolve();
+    }
+    await wait(150);
+    await waitForScormToInitialize(timeout);
+    resolve();
+  });
+}
+
 export const useScorm = create<Scorm>(() => {
   function set(key: string, value: any) {
+    if (!scorm.isActive) {
+      return;
+    }
     scorm.set(key, key === "cmi.suspend_data" ? JSON.stringify(value) : value);
   }
 
   function get(key: string, defaultValue?: any) {
+    if (!scorm.isActive) {
+      return defaultValue;
+    }
     if (key === "cmi.suspend_data") {
       try {
         return JSON.parse(scorm.get(key)) ?? defaultValue;
@@ -37,28 +66,28 @@ export const useScorm = create<Scorm>(() => {
   }
 
   return {
-    init() {
+    async init() {
       scorm.configure({ debug: true, handleExitMode: true, handleCompletionStatus: true });
       scorm.initialize();
+      await waitForScormToInitialize();
+      console.log("?");
       set("cmi.score.min", 0);
       set("cmi.score.max", 1);
       const currentProgress = get("cmi.score.raw", 0);
       if (currentProgress < 1) {
         set("cmi.success_status", "incomplete");
       }
-      scorm.commit();
       return pages[Math.floor(mapLinear(currentProgress, 0, 1, 0, pages.length - 1))];
     },
     get,
     set,
     updateProgress(page) {
-      const currentProgress = get("cmi.score.raw", 0);
+      const currentProgress = parseFloat(get("cmi.score.raw", "0"));
       const progress = (pages.indexOf(page) + 1) / Math.max(1, pages.length);
       set("cmi.score.raw", Math.max(currentProgress, progress));
       if (progress === 1) {
         set("cmi.success_status", "completed");
       }
-      scorm.commit();
     },
     exit() {
       scorm.terminate();

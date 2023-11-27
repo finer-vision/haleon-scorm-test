@@ -13,9 +13,13 @@ export default function App() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    const page = useScorm.getState().init();
-    setLoaded(false);
-    navigate(page);
+    useScorm
+      .getState()
+      .init()
+      .then((page) => {
+        setLoaded(false);
+        navigate(page);
+      });
   }, []);
 
   if (loading) {
