@@ -9,7 +9,7 @@ const PACKAGES_DIR = path.join(ROOT_DIR, "packages");
 const BUILD_DIR = path.join(ROOT_DIR, "build");
 
 const config = {
-  name: "Haleon SCORM Test",
+  name: "Haleon-SCORM-Test",
 };
 
 function replaceTemplate(template: string, key: string, value: string): string {
