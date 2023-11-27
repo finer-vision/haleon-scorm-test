@@ -46,7 +46,6 @@ async function getAllFiles(dir: string, allFiles: string[] = []): Promise<string
 
     execSync(`rm -rf ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
     execSync(`cp -R ${BUILD_DIR} ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
-    execSync(`cp -R ${SCORM_DIR} ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
 
     const manifestTemplate = await fs.readFile(path.join(SCORM_DIR, "imsmanifest.xml"), "utf-8");
     const files = await getAllFiles(BUILD_DIR);

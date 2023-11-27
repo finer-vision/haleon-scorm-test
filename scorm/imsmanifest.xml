@@ -12,17 +12,17 @@
   <organizations default="defaultOrganization">
     <organization identifier="defaultOrganization">
       <title>::name::</title>
-      <item identifier="::name::-org" identifierref="::name::-resource-sco" isvisible="true">
+      <item identifier="::name::" identifierref="::name::" isvisible="true">
         <title>::name::</title>
       </item>
     </organization>
   </organizations>
   <resources>
-    <resource identifier="::name::-resource-sco" type="webcontent" href="index.html" adlcp:scormtype="sco">
+    <resource identifier="::name::" type="webcontent" href="index.html" adlcp:scormtype="sco">
       <file href="index.html"/>
-      <dependency identifierref="::name::-resource-assets"/>
+      <dependency identifierref="::name::"/>
     </resource>
-    <resource identifier="::name::-resource-assets" type="webcontent" adlcp:scormtype="asset">
+    <resource identifier="::name::" type="webcontent" adlcp:scormtype="asset">
       ::files::
     </resource>
   </resources>
