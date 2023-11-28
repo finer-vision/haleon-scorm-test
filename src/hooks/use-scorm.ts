@@ -75,9 +75,10 @@ export const useScorm = create<Scorm>(() => {
 
   return {
     async init() {
-      scorm.configure({ debug: true, handleExitMode: true, handleCompletionStatus: false });
+      scorm.configure({ debug: true, handleExitMode: true, handleCompletionStatus: false, version: "2004" });
       scorm.initialize();
       await waitForScormToInitialize();
+      console.log("isActive", scorm.isActive);
       set("cmi.score.min", 0);
       set("cmi.score.max", 1);
       const currentProgress = parseFloat(get("cmi.score.raw", "0"));
