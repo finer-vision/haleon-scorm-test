@@ -49,6 +49,7 @@ export const useScorm = create<Scorm>(() => {
       return;
     }
     scorm.set(key, key === "cmi.suspend_data" ? JSON.stringify(value) : value);
+    scorm.commit();
   }
 
   function get(key: string, defaultValue?: any) {
