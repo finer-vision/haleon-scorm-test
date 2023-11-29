@@ -9,7 +9,7 @@ export default function Landing() {
 
   return (
     <main>
-      <h1>Landing Page</h1>
+      <h1>1/3 Landing Page</h1>
       <Link to="/home">Go to Home page</Link>
     </main>
   );

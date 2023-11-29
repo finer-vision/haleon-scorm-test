@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <main>
-      <h1>Home Page</h1>
+      <h1>2/3 Home Page</h1>
       <Link to="/end">Go to End page</Link>
     </main>
   );
