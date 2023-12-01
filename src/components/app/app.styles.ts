@@ -63,4 +63,11 @@ export const AppReset = createGlobalStyle`
   h1 {
     padding-top: 3em;
   }
+
+  video {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    display: block;
+  }
 `;
