@@ -108,6 +108,7 @@ export const useScorm = create<Scorm>(() => {
     },
     exit() {
       scorm.terminate();
+      scorm.commit();
       window.close();
     },
   };
