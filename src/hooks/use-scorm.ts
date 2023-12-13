@@ -52,6 +52,10 @@ export const useScorm = create<Scorm>(() => {
         alert("Failed to initialize SCORM");
         return "/";
       }
+      await new Promise((resolve) => {
+        setTimeout(resolve, 5000);
+      });
+      console.log("SCORM initialized");
       set("cmi.score.min", 0);
       set("cmi.score.max", 1);
       const progress = parseFloat(get("cmi.score.scaled", "0"));
@@ -64,6 +68,7 @@ export const useScorm = create<Scorm>(() => {
     },
     setBookmark(bookmark) {
       set("cmi.suspend_data", bookmark);
+      scorm.commit();
     },
     setProgress(progress) {
       if (!scorm.isActive) return;
@@ -79,7 +84,6 @@ export const useScorm = create<Scorm>(() => {
     exit() {
       if (scorm.isActive) {
         scorm.terminate();
-        scorm.commit();
       }
       window.close();
     },
