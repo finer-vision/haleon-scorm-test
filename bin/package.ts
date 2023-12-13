@@ -63,6 +63,7 @@ async function getAllFiles(dir: string, allFiles: string[] = []): Promise<string
     );
     manifest = replaceTemplate(manifest, "version", String(pkg.version));
 
+    execSync(`cp -R ${path.join(SCORM_DIR, "*")} ${path.join(PACKAGES_DIR, "build")}`);
     await fs.writeFile(path.join(PACKAGES_DIR, "build", "imsmanifest.xml"), manifest);
 
     await zip(path.join(PACKAGES_DIR, "build"), path.join(PACKAGES_DIR, "build.zip"));
