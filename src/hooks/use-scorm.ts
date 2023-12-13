@@ -47,7 +47,11 @@ export const useScorm = create<Scorm>(() => {
   return {
     async init() {
       scorm.configure({ debug: true, handleExitMode: true, handleCompletionStatus: false, version: "2004" });
-      scorm.initialize();
+      const initialized = scorm.initialize();
+      if (!initialized) {
+        alert("Failed to initialize SCORM");
+        return "/";
+      }
       set("cmi.score.min", 0);
       set("cmi.score.max", 0);
       const progress = parseFloat(get("cmi.score.scaled", "0"));
@@ -62,6 +66,7 @@ export const useScorm = create<Scorm>(() => {
       set("cmi.suspend_data", bookmark);
     },
     setProgress(progress) {
+      if (!scorm.isActive) return;
       progress = Math.max(parseFloat(get("cmi.score.scaled", "0")), progress);
       set("cmi.score.scaled", progress);
       set("cmi.score.raw", progress);
@@ -72,8 +77,10 @@ export const useScorm = create<Scorm>(() => {
       scorm.commit();
     },
     exit() {
-      scorm.terminate();
-      scorm.commit();
+      if (scorm.isActive) {
+        scorm.terminate();
+        scorm.commit();
+      }
       window.close();
     },
   };
