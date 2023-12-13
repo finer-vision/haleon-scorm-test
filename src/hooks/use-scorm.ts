@@ -53,7 +53,7 @@ export const useScorm = create<Scorm>(() => {
         return "/";
       }
       set("cmi.score.min", 0);
-      set("cmi.score.max", 0);
+      set("cmi.score.max", 1);
       const progress = parseFloat(get("cmi.score.scaled", "0"));
       if (progress < 1) {
         set("cmi.completion_status", "incomplete");
