@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { AppReset, AppVersion } from "@/components/app/app.styles";
 import One from "@/pages/one";
 import Two from "@/pages/two";
@@ -9,19 +9,24 @@ import pkg from "../../../package.json";
 import { useScorm } from "@/hooks/use-scorm";
 
 export default function App() {
-  const [loading, setLoaded] = React.useState(true);
+  const [loading, setLoading] = React.useState(true);
 
   const navigate = useNavigate();
-
   React.useEffect(() => {
     useScorm
       .getState()
       .init()
       .then((bookmark) => {
-        setLoaded(false);
         navigate(bookmark.pathname);
+        setLoading(false);
       });
   }, []);
+
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    if (loading) return;
+    useScorm.getState().setBookmark({ pathname });
+  }, [loading, pathname]);
 
   if (loading) {
     return <>Loading...</>;
