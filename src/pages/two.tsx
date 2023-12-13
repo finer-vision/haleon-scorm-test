@@ -2,15 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useScorm } from "@/hooks/use-scorm";
 
-export default function Home() {
+export default function Two() {
   React.useEffect(() => {
-    useScorm.getState().updateProgress("/home");
+    useScorm.getState().setProgress(0.5);
   }, []);
 
   return (
     <main>
-      <h1>2/3 Home Page</h1>
-      <Link to="/end">Go to End page</Link>
+      <h1>Page 2/4</h1>
+      <Link to="/three">Next Page</Link>
     </main>
   );
 }

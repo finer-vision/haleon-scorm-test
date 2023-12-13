@@ -1,9 +1,10 @@
 import React from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { AppReset, AppVersion } from "@/components/app/app.styles";
-import Landing from "@/pages/landing";
-import Home from "@/pages/home";
-import End from "@/pages/end";
+import One from "@/pages/one";
+import Two from "@/pages/two";
+import Three from "@/pages/three";
+import Four from "@/pages/four";
 import pkg from "../../../package.json";
 import { useScorm } from "@/hooks/use-scorm";
 
@@ -16,9 +17,9 @@ export default function App() {
     useScorm
       .getState()
       .init()
-      .then((page) => {
+      .then((bookmark) => {
         setLoaded(false);
-        navigate(page);
+        navigate(bookmark.pathname);
       });
   }, []);
 
@@ -32,9 +33,10 @@ export default function App() {
       <AppVersion>v{pkg.version}</AppVersion>
       <React.Suspense fallback="Loading...">
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/end" element={<End />} />
+          <Route path="/" element={<One />} />
+          <Route path="/two" element={<Two />} />
+          <Route path="/three" element={<Three />} />
+          <Route path="/four" element={<Four />} />
         </Routes>
       </React.Suspense>
     </>
