@@ -46,7 +46,7 @@ export const useScorm = create<Scorm>(() => {
 
   return {
     async init() {
-      scorm.configure({ debug: true, handleExitMode: true, handleCompletionStatus: false, version: "2004" });
+      scorm.configure({ debug: true, handleExitMode: true, handleCompletionStatus: false, version: "1.2" });
       const initialized = scorm.initialize();
       if (!initialized) {
         alert("Failed to initialize SCORM");
@@ -56,9 +56,9 @@ export const useScorm = create<Scorm>(() => {
         setTimeout(resolve, 5000);
       });
       console.log("SCORM initialized");
-      set("cmi.score.min", 0);
-      set("cmi.score.max", 1);
-      const progress = parseFloat(get("cmi.score.scaled", "0"));
+      set("cmi.core.score.min", 0);
+      set("cmi.core.score.max", 1);
+      const progress = parseFloat(get("cmi.core.score.raw", "0"));
       if (progress < 1) {
         set("cmi.completion_status", "incomplete");
         set("cmi.success_status", "unknown");
@@ -72,9 +72,8 @@ export const useScorm = create<Scorm>(() => {
     },
     setProgress(progress) {
       if (!scorm.isActive) return;
-      progress = Math.max(parseFloat(get("cmi.score.scaled", "0")), progress);
-      set("cmi.score.scaled", progress);
-      set("cmi.score.raw", progress);
+      progress = Math.max(parseFloat(get("cmi.core.score.raw", "0")), progress);
+      set("cmi.core.score.raw", progress);
       if (progress === 1) {
         set("cmi.completion_status", "completed");
         set("cmi.success_status", "passed");
