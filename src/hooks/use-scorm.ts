@@ -47,14 +47,7 @@ export const useScorm = create<Scorm>(() => {
   return {
     async init() {
       scorm.configure({ debug: true, handleExitMode: true, handleCompletionStatus: false, version: "1.2" });
-      const initialized = scorm.initialize();
-      if (!initialized) {
-        alert("Failed to initialize SCORM");
-        return "/";
-      }
-      await new Promise((resolve) => {
-        setTimeout(resolve, 5000);
-      });
+      scorm.initialize();
       console.log("SCORM initialized");
       set("cmi.core.score.min", 0);
       set("cmi.core.score.max", 1);
