@@ -9,10 +9,12 @@ import pkg from "../../../package.json";
 import { useScorm } from "@/hooks/use-scorm";
 
 export default function App() {
+  const [started, setStarted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
   const navigate = useNavigate();
   React.useEffect(() => {
+    if (!started) return;
     useScorm
       .getState()
       .init()
@@ -20,13 +22,18 @@ export default function App() {
         navigate(bookmark.pathname);
         setLoading(false);
       });
-  }, []);
+  }, [started]);
 
   const { pathname } = useLocation();
   React.useEffect(() => {
+    if (!started) return;
     if (loading) return;
     useScorm.getState().setBookmark({ pathname });
-  }, [loading, pathname]);
+  }, [started, loading, pathname]);
+
+  if (!started) {
+    return <button onClick={() => setStarted(true)}>Initialize SCORM</button>;
+  }
 
   if (loading) {
     return <>Loading...</>;
