@@ -23,7 +23,7 @@ export const useScorm = create<Scorm>(() => {
     // }
     // scorm.set(key, key === "cmi.suspend_data" ? JSON.stringify(value) : value);
     if (API === null) return;
-    API["LMSSetValue"](key, key, key === "cmi.suspend_data" ? JSON.stringify(value) : value);
+    API["LMSSetValue"](key, key === "cmi.suspend_data" ? JSON.stringify(value) : value);
   }
 
   function get(key: string, defaultValue?: any) {
