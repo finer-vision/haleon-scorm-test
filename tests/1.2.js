@@ -69,3 +69,21 @@ class SCORM {
   api.initialize();
   console.log("cmi.core.score.raw", api.getValue("cmi.core.score.raw"));
 }
+
+/**
+ * Raw test 1
+ */
+{
+  window.opener.top["API"]["LMSInitialize"]("");
+  window.opener.top["API"]["LMSSetValue"]("cmi.core.score.raw", "0.1");
+  window.opener.top["API"]["LMSCommit"]("");
+  window.opener.top["API"]["LMSFinish"]("");
+}
+
+/**
+ * Raw test 2
+ */
+{
+  window.opener.top["API"]["LMSInitialize"]("");
+  window.opener.top["API"]["LMSGetValue"]("cmi.core.score.raw");
+}
