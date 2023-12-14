@@ -3,6 +3,7 @@ import * as fs from "fs/promises";
 import { execSync } from "child_process";
 import { zip } from "zip-a-folder";
 
+const VERSION: "1.2" | "2004" = "1.2";
 const ROOT_DIR = path.resolve(__dirname, "..");
 const SCORM_DIR = path.join(ROOT_DIR, "scorm");
 const PACKAGES_DIR = path.join(ROOT_DIR, "packages");
@@ -47,7 +48,7 @@ async function getAllFiles(dir: string, allFiles: string[] = []): Promise<string
     execSync(`rm -rf ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
     execSync(`cp -R ${BUILD_DIR} ${path.join(PACKAGES_DIR, "build")}`, { stdio: "inherit" });
 
-    const manifestTemplate = await fs.readFile(path.join(SCORM_DIR, "imsmanifest.xml"), "utf-8");
+    const manifestTemplate = await fs.readFile(path.join(SCORM_DIR, `imsmanifest-${VERSION}.xml`), "utf-8");
     const files = await getAllFiles(BUILD_DIR);
 
     let manifest = replaceTemplate(manifestTemplate, "name", config.name);
@@ -63,7 +64,7 @@ async function getAllFiles(dir: string, allFiles: string[] = []): Promise<string
     );
     manifest = replaceTemplate(manifest, "version", String(pkg.version));
 
-    execSync(`cp -R ${path.join(SCORM_DIR, "*")} ${path.join(PACKAGES_DIR, "build")}`);
+    execSync(`cp -R ${path.join(SCORM_DIR, VERSION, "*")} ${path.join(PACKAGES_DIR, "build")}`);
     await fs.writeFile(path.join(PACKAGES_DIR, "build", "imsmanifest.xml"), manifest);
 
     await zip(path.join(PACKAGES_DIR, "build"), path.join(PACKAGES_DIR, "build.zip"));
