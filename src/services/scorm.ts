@@ -1,4 +1,4 @@
-const SCORM_API = ((window as any).opener.top["API"] as any) ?? null;
+const SCORM_API = ((window as any).opener?.top?.["API"] as any) ?? null;
 
 // For debugging
 (window as any).SCORM_API = SCORM_API;
@@ -12,7 +12,7 @@ export const scorm = {
   },
   get(key: string, defaultValue?: any) {
     if (SCORM_API === null) {
-      return;
+      return defaultValue;
     }
     const value = SCORM_API["LMSGetValue"](key);
     if (key === "cmi.suspend_data") {
