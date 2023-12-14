@@ -1,46 +1,23 @@
 class SCORM {
   /**
-   * @type {("API" | "API_1484_11")}
+   * @type {Object}
    */
-  #api;
-
-  /**
-   * @type {("1.2" | "2004")}
-   */
-  #version;
-
-  /**
-   * @param {("1.2" | "2004")} version
-   */
-  constructor(version) {
-    this.#api = version === "1.2" ? window.opener.top.API : window.opener.top.API_1484_11;
-    this.#version = version;
-  }
+  #api = window.opener.top["API_1484_11"];
 
   initialize() {
-    let initialized;
-    if (this.#version === "1.2") {
-      initialized = this.#api.LMSInitialize("") === "true";
+    if (this.#api["Initialize"]("") !== "true") {
+      console.warn("Failed to initialize SCORM");
     } else {
-      initialized = this.#api.Initialize("") === "true";
+      console.info("SCORM initialized");
     }
-    if (!initialized) {
-      throw new Error("Failed to initialize SCORM");
-    }
-    console.info("SCORM initialized");
   }
 
   terminate() {
-    let terminated;
-    if (this.#version === "1.2") {
-      terminated = this.#api.LMSTerminate("") === "true";
+    if (this.#api["Terminate"]("") !== "true") {
+      console.warn("Failed to terminate SCORM");
     } else {
-      terminated = this.#api.Terminate("") === "true";
+      console.info("SCORM terminated");
     }
-    if (!terminated) {
-      throw new Error("Failed to terminate SCORM");
-    }
-    console.info("SCORM terminated");
   }
 
   /**
@@ -48,11 +25,7 @@ class SCORM {
    * @returns {String}
    */
   getValue(variable) {
-    if (this.#version === "1.2") {
-      return this.#api.LMSGetValue(variable);
-    } else {
-      return this.#api.GetValue(variable);
-    }
+    return this.#api["GetValue"](variable);
   }
 
   /**
@@ -60,29 +33,19 @@ class SCORM {
    * @param {String} value
    */
   setValue(variable, value) {
-    let set;
-    if (this.#version === "1.2") {
-      set = this.#api.LMSSetValue(variable, value) === "true";
+    if (this.#api["SetValue"](variable, value) !== "true") {
+      console.warn(`Failed to set SCORM variable "${variable}"`);
     } else {
-      set = this.#api.SetValue(variable, value) === "true";
+      console.info(`Set SCORM variable "${variable}" with a value of "${value}"`);
     }
-    if (!set) {
-      throw new Error(`Failed to set SCORM variable "${variable}"`);
-    }
-    console.info(`Set SCORM variable "${variable}" with a value of "${value}"`);
   }
 
   commit() {
-    let committed;
-    if (this.#version === "1.2") {
-      committed = this.#api.LMSCommit("") === "true";
+    if (this.#api["Commit"]("") !== "true") {
+      console.warn("Failed to commit to SCORM");
     } else {
-      committed = this.#api.Commit("") === "true";
+      console.info("Committed to SCORM");
     }
-    if (!committed) {
-      throw new Error("Failed to commit to SCORM");
-    }
-    console.info("Committed to SCORM");
   }
 }
 
@@ -90,7 +53,7 @@ class SCORM {
  * First Run
  */
 {
-  const api = new SCORM("2004");
+  const api = new SCORM();
   api.initialize();
   console.log("cmi.score.raw", api.getValue("cmi.score.raw"));
   api.setValue("cmi.score.raw", "0.5");
@@ -102,7 +65,7 @@ class SCORM {
  * Second Run
  */
 {
-  const api = new SCORM("2004");
+  const api = new SCORM();
   api.initialize();
   console.log("cmi.score.raw", api.getValue("cmi.score.raw"));
 }
