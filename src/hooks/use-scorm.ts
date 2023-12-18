@@ -17,11 +17,11 @@ export const useScorm = create<Scorm>(() => {
     async init() {
       scorm.initialize();
       console.log("SCORM initialized");
-      scorm.set("cmi.core.score.min", 0);
-      scorm.set("cmi.core.score.max", 1);
-      const progress = parseFloat(scorm.get("cmi.core.score.raw", "0"));
+      scorm.set("cmi.score.min", 0);
+      scorm.set("cmi.score.max", 1);
+      const progress = parseFloat(scorm.get("cmi.score.raw", "0"));
       if (progress < 1) {
-        scorm.set("cmi.core.lesson_status", "incomplete");
+        scorm.set("cmi.completion_status", "incomplete");
       }
       scorm.commit();
       return scorm.get("cmi.suspend_data", { pathname: "/" });
@@ -31,10 +31,10 @@ export const useScorm = create<Scorm>(() => {
       scorm.commit();
     },
     setProgress(progress) {
-      progress = Math.max(parseFloat(scorm.get("cmi.core.score.raw", "0")), progress);
-      scorm.set("cmi.core.score.raw", progress);
+      progress = Math.max(parseFloat(scorm.get("cmi.score.raw", "0")), progress);
+      scorm.set("cmi.score.raw", progress);
       if (progress === 1) {
-        scorm.set("cmi.core.lesson_status", "completed");
+        scorm.set("cmi.completion_status", "completed");
       }
       scorm.commit();
     },

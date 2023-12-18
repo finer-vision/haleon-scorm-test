@@ -1,4 +1,4 @@
-const SCORM_API = ((window as any).opener?.top?.["API"] as any) ?? null;
+const SCORM_API = ((window as any).opener?.top?.["API_1484_11"] as any) ?? null;
 
 // For debugging
 (window as any).SCORM_API = SCORM_API;
@@ -8,13 +8,13 @@ export const scorm = {
     if (SCORM_API === null) {
       return;
     }
-    SCORM_API["LMSInitialize"]("");
+    SCORM_API["Initialize"]("");
   },
   get(key: string, defaultValue?: any) {
     if (SCORM_API === null) {
       return defaultValue;
     }
-    const value = SCORM_API["LMSGetValue"](key);
+    const value = SCORM_API["GetValue"](key);
     if (key === "cmi.suspend_data") {
       try {
         if (value === "") {
@@ -34,18 +34,18 @@ export const scorm = {
     if (SCORM_API === null) {
       return;
     }
-    SCORM_API["LMSSetValue"](key, key === "cmi.suspend_data" ? JSON.stringify(value) : value);
+    SCORM_API["SetValue"](key, key === "cmi.suspend_data" ? JSON.stringify(value) : value);
   },
   commit() {
     if (SCORM_API === null) {
       return;
     }
-    SCORM_API["LMSCommit"]("");
+    SCORM_API["Commit"]("");
   },
   terminate() {
     if (SCORM_API === null) {
       return;
     }
-    SCORM_API["LMSFinish"]("");
+    SCORM_API["Terminate"]("");
   },
 };

@@ -3,7 +3,7 @@ import * as fs from "fs/promises";
 import { execSync } from "child_process";
 import { zip } from "zip-a-folder";
 
-const VERSION: "1.2" | "2004" = "1.2";
+const VERSION: "1.2" | "2004" = "2004";
 const ROOT_DIR = path.resolve(__dirname, "..");
 const SCORM_DIR = path.join(ROOT_DIR, "scorm");
 const PACKAGES_DIR = path.join(ROOT_DIR, "packages");
