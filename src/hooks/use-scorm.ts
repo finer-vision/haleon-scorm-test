@@ -22,6 +22,7 @@ export const useScorm = create<Scorm>(() => {
       const progress = parseFloat(scorm.get("cmi.score.raw", "0"));
       if (progress < 1) {
         scorm.set("cmi.completion_status", "incomplete");
+        scorm.set("cmi.success_status", "unknown");
       }
       scorm.commit();
       return scorm.get("cmi.suspend_data", { pathname: "/" });
@@ -35,6 +36,7 @@ export const useScorm = create<Scorm>(() => {
       scorm.set("cmi.score.raw", progress);
       if (progress === 1) {
         scorm.set("cmi.completion_status", "completed");
+        scorm.set("cmi.success_status", "passed");
       }
       scorm.commit();
     },
