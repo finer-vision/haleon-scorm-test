@@ -17,6 +17,7 @@ export const useScorm = create<Scorm>(() => {
     async init() {
       scorm.initialize();
       console.log("SCORM initialized");
+      scorm.timer();
       scorm.set("cmi.score.min", 0);
       scorm.set("cmi.score.max", 1);
       if (scorm.get("cmi.completion_status") !== "completed" && scorm.get("cmi.success_status") !== "passed") {
@@ -39,6 +40,7 @@ export const useScorm = create<Scorm>(() => {
     setProgress(progress) {
       progress = Math.max(parseFloat(scorm.get("cmi.score.raw", "0")), progress);
       scorm.set("cmi.score.raw", progress);
+      scorm.set("cmi.progress_measure", progress);
       if (progress === 1) {
         scorm.set("cmi.completion_status", "completed");
         scorm.set("cmi.success_status", "passed");
