@@ -46,12 +46,6 @@ export const scorm = {
     if (SCORM_API === null) {
       return;
     }
-    if (this.get("cmi.completion_status") !== "completed" && this.get("cmi.success_status") !== "passed") {
-      this.set("cmi.exit", "suspend");
-    } else {
-      this.set("cmi.exit", "normal");
-    }
-    this.commit();
     SCORM_API["Terminate"]("");
   },
 };

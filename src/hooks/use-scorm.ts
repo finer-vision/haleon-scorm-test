@@ -19,6 +19,11 @@ export const useScorm = create<Scorm>(() => {
       console.log("SCORM initialized");
       scorm.set("cmi.score.min", 0);
       scorm.set("cmi.score.max", 1);
+      if (scorm.get("cmi.completion_status") !== "completed" && scorm.get("cmi.success_status") !== "passed") {
+        scorm.set("cmi.exit", "suspend");
+      } else {
+        scorm.set("cmi.exit", "normal");
+      }
       const progress = parseFloat(scorm.get("cmi.score.raw", "0"));
       if (progress < 1) {
         scorm.set("cmi.completion_status", "incomplete");
