@@ -34,6 +34,11 @@ export const scorm = {
     SCORM_API["Initialize"]("");
   },
   timer() {
+    const scormTime = this.get("cmi.total_time", "PT0H0M0S");
+    if (["PT0H0M0S", "P"].includes(scormTime)) {
+      this.set("cmi.session_time", "PT0H0M0S");
+      this.commit();
+    }
     const startTime = Date.now();
     const interval = 1000;
     let lastTickTime = 0;
