@@ -49,10 +49,9 @@ export const scorm = {
         return;
       }
       lastTickTime = Date.now();
-      this.set(
-        "cmi.session_time",
-        msToScormTime(scormTimeToMs(this.get("cmi.total_time", "PT0H0M0S")) + this.elapsedTime),
-      );
+      const ms = scormTimeToMs(this.get("cmi.total_time", "PT0H0M0S")) + this.elapsedTime;
+      this.set("cmi.session_time", msToScormTime(ms));
+      console.log(`Time in MS: ${ms}`);
       this.commit();
     };
     requestAnimationFrame(tick);
